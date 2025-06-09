@@ -95,12 +95,40 @@ app OpenSaaS {
   },
 }
 
-route LandingPageRoute { path: "/", to: LandingPage }
+route LandingPageRoute { path: "/", to: GeneratePage }
+route GenerateRoute { path: "/generate", to: GeneratePage }
+page GeneratePage {
+  component: import GeneratePage from "@src/generator/GeneratePage"
+}
+
+route PricingPageRoute { path: "/pricing", to: PricingPage }
+page PricingPage {
+  component: import PricingPage from "@src/payment/PricingPage"
+}
+
+route AccountRoute { path: "/account", to: AccountPage }
+page AccountPage {
+  authRequired: true,
+  component: import Account from "@src/user/AccountPage"
+}
+
+//#region Auth Pages
+route EmailVerificationRoute { path: "/verify-email", to: EmailVerificationPage }
+page EmailVerificationPage {
+  component: import { EmailVerificationPage } from "@src/auth/email-and-pass/EmailVerificationPage",
+}
+
+route PasswordResetRoute { path: "/password-reset", to: PasswordResetPage }
+page PasswordResetPage {
+  component: import { PasswordResetPage } from "@src/auth/email-and-pass/PasswordResetPage",
+}
+
+// === Commented out routes ===
+/*
 page LandingPage {
   component: import LandingPage from "@src/landing-page/LandingPage"
 }
 
-//#region Auth Pages
 route LoginRoute { path: "/login", to: LoginPage }
 page LoginPage {
   component: import Login from "@src/auth/LoginPage"
@@ -115,25 +143,9 @@ route RequestPasswordResetRoute { path: "/request-password-reset", to: RequestPa
 page RequestPasswordResetPage {
   component: import { RequestPasswordResetPage } from "@src/auth/email-and-pass/RequestPasswordResetPage",
 }
-
-route PasswordResetRoute { path: "/password-reset", to: PasswordResetPage }
-page PasswordResetPage {
-  component: import { PasswordResetPage } from "@src/auth/email-and-pass/PasswordResetPage",
-}
-
-route EmailVerificationRoute { path: "/email-verification", to: EmailVerificationPage }
-page EmailVerificationPage {
-  component: import { EmailVerificationPage } from "@src/auth/email-and-pass/EmailVerificationPage",
-}
-//#endregion
+*/
 
 //#region User
-route AccountRoute { path: "/account", to: AccountPage }
-page AccountPage {
-  authRequired: true,
-  component: import Account from "@src/user/AccountPage"
-}
-
 query getPaginatedUsers {
   fn: import { getPaginatedUsers } from "@src/user/operations",
   entities: [User]
@@ -184,11 +196,6 @@ query getAllTasksByUser {
 //#endregion
 
 //#region Payment
-route PricingPageRoute { path: "/pricing", to: PricingPage }
-page PricingPage {
-  component: import PricingPage from "@src/payment/PricingPage"
-}
-
 route CheckoutRoute { path: "/checkout", to: CheckoutPage }
 page CheckoutPage {
   authRequired: true,
